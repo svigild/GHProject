@@ -1,0 +1,249 @@
+body {
+    background-color: #0f0f0f;
+    color: #ffffff;
+    font-family: 'Roboto', sans-serif;
+    padding-top: 80px;
+}
+
+.navbar {
+    background-color: rgba(30, 30, 30, 0.8);
+    backdrop-filter: blur(5px);
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.navbar-nav .nav-link {
+    color: #ffffff !important;
+    font-size: 1rem;
+    margin-right: 10px;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #6200ea !important;
+}
+
+.navbar-nav .nav-link.active {
+    color: #6200ea !important;
+    font-weight: bold !important;
+}
+
+.card {
+    background-color: #1e1e1e;
+    border: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 25px rgba(98, 0, 234, 0.2);
+}
+
+.card-title {
+    color: #6200ea;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.list-group-item {
+    background-color: #2a2a2a;
+    border: none;
+    margin-bottom: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.list-group-item:hover {
+    background-color: #333333;
+}
+
+.btn {
+    padding: 10px 20px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #6200ea;
+    border-color: #6200ea;
+
+}
+
+.btn-primary:hover {
+    background-color: #7c4dff;
+    border-color: #7c4dff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(124, 77, 255, 0.4);
+}
+
+.btn-success {
+    background-color: #00c853;
+    border-color: #00c853;
+}
+
+.btn-success:hover {
+    background-color: #00e676;
+    border-color: #00e676;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 230, 118, 0.4);
+}
+
+.btn-danger {
+    background-color: #ff1744;
+    border-color: #ff1744;
+}
+
+.btn-danger:hover {
+    background-color: #ff4081;
+    border-color: #ff4081;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 23, 68, 0.4);
+}
+
+.profile-pic {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+    margin-right: 20px;
+}
+
+.nombre-amigo {
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: #ffffff;
+}
+
+.delete-button, .btn-chat, .open-button {
+    padding: 5px 10px;
+    transition: all 0.3s ease;
+}
+
+.delete-button {
+    background-color: #ff1744;
+    color: white;
+}
+
+.open-button {
+    background-color: #6200ea;
+    color: white;
+    margin-right: 5px;
+}
+
+.open-button:hover {
+    background-color: #a166f6;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(111, 0, 181, 0.4);
+}
+
+.delete-button:hover {
+    background-color: #ff4081;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(255, 23, 68, 0.4);
+}
+
+.modal-content {
+    background-color: #1e1e1e;
+    border-radius: 15px;
+}
+
+.modal-header {
+    background-color: #6200ea;
+    color: white;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.modal-body {
+    background-color: #2a2a2a;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.list-group-item {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+.game-carousel {
+    display: flex;
+    overflow-x: auto;
+    padding: 20px 0;
+    scroll-snap-type: x mandatory;
+}
+
+.game-card {
+    flex: 0 0 auto;
+    width: 200px;
+    margin-right: 20px;
+    scroll-snap-align: start;
+    background-color: #2a2a2a;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.game-card:hover {
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: 0 10px 20px rgba(98, 0, 234, 0.3);
+}
+
+.game-card img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+}
+
+.game-card .card-body {
+    padding: 15px;
+}
+
+.game-card .card-title {
+    font-size: 1rem;
+    margin-bottom: 5px;
+    color: white;
+}
+
+.fecha-salida, .plataforma {
+    font-size: 0.8rem;
+    padding: 3px 8px;
+    border-radius: 10px;
+    display: inline-block;
+    margin-top: 5px;
+}
+
+.fecha-salida {
+    background-color: #333333;
+    color: #ffffff;
+}
+
+.plataforma {
+    background-color: #6200ea;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .game-card {
+        width: 150px;
+    }
+}
+
+
+.bg-purple {
+    background-color: #6200ea;
+}
+
+.btn-purple {
+    background-color: #6200ea;
+    color: white;
+}
+
+.input-group .btn {
+    height: auto;
+    line-height: normal;
+}

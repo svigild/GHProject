@@ -1,0 +1,131 @@
+/* Estilo general para las páginas */
+body {
+    background-color: #121212; /* Fondo oscuro */
+    color: #ffffff; /* Color del texto */
+    font-family: Arial, sans-serif; /* Fuente general */
+}
+
+.container {
+    max-width: 1200px;
+    margin-top: 100px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    padding: 30px;
+}
+
+h1 {
+    color: #6200ea; /* Color morado para el título principal */
+}
+
+h2 {
+    color: #ffffff; /* Color blanco para los subtítulos */
+}
+
+hr {
+    border-top: 1px solid #6200ea; /* Línea horizontal morada */
+}
+
+p {
+    line-height: 1.6; /* Espaciado entre líneas */
+}
+
+/* Estilo del botón animado */
+.animated-button {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #6200ea; /* Color del botón primario */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Transiciones suaves */
+}
+
+.animated-button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300%;
+    height: 300%;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.5s ease;
+}
+
+.animated-button:hover::after {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.animated-button:hover {
+    background-color: #3700b3; /* Color más oscuro al pasar el mouse */
+    border-color: #6a02fb;
+    transform: translateY(-2px);
+    color: white;
+}
+
+/* Estilo del pie de página */
+footer {
+    margin-top: 30px;
+}
+
+
+.navbar {
+    background-color: rgba(30, 30, 30, 0.8);
+    backdrop-filter: blur(5px);
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.navbar-nav .nav-link {
+    color: #ffffff !important;
+    font-size: 1rem;
+    margin-right: 10px;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #6200ea !important;
+}
+
+.navbar-nav .nav-link.active {
+    color: #6200ea !important;
+    font-weight: bold !important;
+}
+
+.contact-icon {
+    font-size: 3rem;
+    color: #6200ea;
+    margin-bottom: 1rem;
+}
+.contact-card {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.contact-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(98, 0, 234, 0.3);
+}
+.contact-info {
+    font-size: 1.2rem;
+}
+.social-icons {
+    font-size: 2rem;
+    margin-top: 2rem;
+}
+.social-icons a {
+    color: #ffffff;
+    margin: 0 10px;
+    transition: color 0.3s ease;
+}
+.social-icons a:hover {
+    color: #6200ea;
+}

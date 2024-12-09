@@ -1,0 +1,146 @@
+.container {
+    max-width: 1200px;
+    margin-top: 100px;
+    background-color: rgba(255, 255, 255, 0.1); /* Fondo transparente para las tablas */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2 {
+    color: #ffffff;
+    text-align: center;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 40px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.table th, .table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.table th {
+    background-color: #6200ea; /* Cabeceras de color #6200ea */
+    color: white;
+}
+
+.table tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.table tr{
+    color: white;
+}
+
+.table tr:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.profile-pic {
+    width: 50px; /* Tamaño de la imagen */
+    height: 50px;
+}
+
+/* navbar */
+.navbar {
+    backdrop-filter: blur(5px); /* Filtro de desenfoque en la barra de navegación */
+    background-color: rgba(30, 30, 30, 0.8);
+}
+
+.navbar-nav .nav-link {
+    color: #ffffff !important;
+    font-size: 1rem; /* Tamaño de fuente */
+    margin-right: 10px; /* Espaciado entre enlaces */
+}
+
+.navbar-nav .nav-link.active {
+    color: #6200ea !important;
+    font-weight: bold !important;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.container {
+    background-color: #212121;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease;
+    margin-top: 80px;
+    padding-top: 10px;
+}
+
+body {
+    background-color: #121212;
+}
+
+#titulo {
+    margin-bottom: 40px;
+}
+
+/* Modal */
+.modal-header {
+    background-color: #212121;
+    color: white;
+}
+
+.modal-body {
+    background-color: #121212;
+    color: white;
+}
+
+.modal-footer {
+    background-color: #212121;
+    color: white;
+}
+
+#guardarUsuario {
+    margin-top: 10px;
+    background-color: #6200ea;
+    border-color: #6200ea;
+    color: #fff;
+}
+
+#guardarUsuario:hover {
+    background-color: #3700b3;
+    border-color: #3700b3;
+    color: #fff;
+}
+
+#cerrarUsuario {
+    margin-top: 10px;
+    background-color: #d9534f;
+    border-color: #d9534f;
+    color: #fff;
+}
+
+#cerrarUsuario:hover {
+    margin-top: 10px;
+    background-color: #c9302c;
+    border-color: #ac2925;
+    color: #fff;
+}
+
+#cerrarUsuario1 {
+    color: white;
+}
+
+.nav-link {
+    color: #6200ea;
+}
+
+.nav-link:hover {
+    color: white;
+}
+
+.nav-link .active {
+    background-color: red;
+}
+

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Panel de Control</title>
+  <link rel="icon" href="/icons/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="/css/admin-panel.css">
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+  <script src="/js/admin-panel.js"> </script>
+</head>
+<body>
+<!-- Navegación -->
+<nav class="navbar navbar-expand-lg fixed-top navbar-dark" style="backdrop-filter: blur(5px);">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">GameHub</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" aria-current="page" href="/">Inicio</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/biblioteca">Biblioteca</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/amigos">Amigos</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/juegos">Juegos</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/foros">Foros</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/torneos">Torneos</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/noticias">Noticias</a>
+        </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/admin">Admin</a>
+          </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <img class="rounded-circle" th:src="${urlFotoPerfil}" alt="Foto de perfil" height="30" width="30"/> Mi perfil
+          </a>
+          <ul class="dropdown-menu dropdown-menu-right">
+            <li><a class="dropdown-item" href="/perfil/editar">Editar perfil</a></li>
+            <form th:action="@{/logout}" method="post" id="logoutForm">
+              <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+              <a class="dropdown-item" href="#" onclick="document.getElementById('logoutForm').submit();">Cerrar sesión</a>
+            </form>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="container mt-5 pt-4">
+  <h1 class="text-center mb-4">Panel de Administración</h1>
+  <!-- Mensaje de éxito -->
+  <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+    <strong th:text="${successMessage}"></strong>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+
+  <!-- Mensaje de error -->
+  <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+    <strong th:text="${errorMessage}"></strong>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  <!-- Tabs -->
+  <ul class="nav nav-tabs" id="adminTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="usuarios-tab" data-bs-toggle="tab" data-bs-target="#usuarios" type="button" role="tab" aria-controls="usuarios" aria-selected="true">Usuarios</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="torneos-tab" data-bs-toggle="tab" data-bs-target="#torneos" type="button" role="tab" aria-controls="torneos" aria-selected="false">Torneos</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="foros-tab" data-bs-toggle="tab" data-bs-target="#foros" type="button" role="tab" aria-controls="foros" aria-selected="false">Foros</button>
+    </li>
+  </ul>
+
+  <div class="tab-content mt-3" id="adminTabsContent">
+    <!-- Usuarios Tab -->
+    <div class="tab-pane fade show active" id="usuarios" role="tabpanel" aria-labelledby="usuarios-tab">
+      <div class="mb-3">
+        <input type="text" id="buscarUsuarios" class="form-control" placeholder="Buscar usuarios por nombre de usuario">
+      </div>
+      <div class="row" id="usuariosContainer">
+        <div th:each="usuario : ${users}" class="col-md-4">
+          <div class="card text-white bg-dark mb-3">
+            <img th:src="${usuario.fotoPerfil}" class="card-img-top mx-auto mt-3" style="width: 100px; height: 100px; object-fit: cover;" alt="Imagen de perfil">
+            <div class="card-body text-center">
+              <h5 class="card-title" th:text="${usuario.nombre}"></h5>
+              <p class="card-text">Email: <span th:text="${usuario.email}"></span></p>
+              <button class="btn btn-warning" data-bs-toggle="modal" th:data-bs-target="'#editUserModal' + ${usuario.id}">Editar</button>
+            </div>
+          </div>
+
+          <!-- Modal de edición para usuario -->
+          <div class="modal fade" th:id="'editUserModal' + ${usuario.id}" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="editUserModalLabel">Editar Usuario</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form th:action="@{/admin/usuarios/{id}(id=${usuario.id})}" method="post">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <div class="mb-3">
+                      <label for="nombreUsuario" class="form-label">Nombre</label>
+                      <input type="text" id="nombreUsuario" name="nombre" th:value="${usuario.nombre}" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                      <label for="emailUsuario" class="form-label">Email</label>
+                      <input type="email" id="emailUsuario" name="email" th:value="${usuario.email}" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                      <label for="fotoPerfilUsuario" class="form-label">Foto de Perfil</label>
+                      <input type="text" id="fotoPerfilUsuario" name="fotoPerfil" th:value="${usuario.fotoPerfil}" class="form-control" />
+                    </div>
+                    <button type="submit" class="btn btn-success">Guardar Cambios</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Torneos Tab -->
+    <div class="tab-pane fade" id="torneos" role="tabpanel" aria-labelledby="torneos-tab">
+      <div class="mb-3">
+        <input type="text" id="buscarTorneos" class="form-control" placeholder="Buscar torneos por nombre">
+      </div>
+      <div class="row" id="torneosContainer">
+        <div th:each="torneo : ${tournaments}" class="col-md-4">
+          <div class="card text-white bg-dark mb-3">
+            <div class="card-body">
+              <h5 class="card-title" th:text="${torneo.nombre}"></h5>
+              <p class="card-text">Fecha de inicio: <span th:text="${#temporals.format(torneo.fechaInicio, 'dd/MM/yyyy')}"></span></p>
+              <button class="btn btn-warning" data-bs-toggle="modal" th:data-bs-target="'#editTournamentModal' + ${torneo.id}">Editar</button>
+              <button class="btn btn-danger" data-bs-toggle="modal" th:data-bs-target="'#deleteTournamentModal' + ${torneo.id}">Eliminar</button>
+            </div>
+          </div>
+
+          <!-- Modal de edición para torneos -->
+          <div class="modal fade" th:id="'editTournamentModal' + ${torneo.id}" tabindex="-1" aria-labelledby="editTournamentModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="editTournamentModalLabel">Editar Torneo</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form th:action="@{/admin/torneos/{id}(id=${torneo.id})}" method="post">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <div class="mb-3">
+                      <label for="nombreTorneo" class="form-label">Nombre</label>
+                      <input type="text" id="nombreTorneo" name="nombre" th:value="${torneo.nombre}" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                      <label for="fechaInicio" class="form-label">Fecha de Inicio</label>
+                      <input type="datetime-local" id="fechaInicio" name="fechaInicio" th:value="${#temporals.format(torneo.fechaInicio, 'yyyy-MM-dd''T''HH:mm')}" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                      <label for="fechaFin" class="form-label">Fecha de Fin</label>
+                      <input type="datetime-local" id="fechaFin" name="fechaFin" th:value="${#temporals.format(torneo.fechaFin, 'yyyy-MM-dd''T''HH:mm')}" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                      <label for="maxParticipantes" class="form-label">Máximo de Participantes</label>
+                      <input type="number" id="maxParticipantes" name="maxParticipantes" th:value="${torneo.maxParticipantes}" class="form-control" required />
+                    </div>
+                    <button type="submit" class="btn btn-success">Guardar Cambios</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Modal para confirmar eliminación de torneo -->
+          <div class="modal fade" th:id="'deleteTournamentModal' + ${torneo.id}" tabindex="-1" aria-labelledby="deleteTournamentModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="deleteTournamentModalLabel">Confirmar Eliminación</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  ¿Estás seguro de que deseas eliminar el torneo <strong th:text="${torneo.nombre}"></strong>?
+                </div>
+                <div class="modal-footer">
+                  <form th:action="@{/admin/torneos/eliminar/{id}(id=${torneo.id})}" method="post">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                  </form>
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Foros Tab -->
+    <div class="tab-pane fade" id="foros" role="tabpanel" aria-labelledby="foros-tab">
+      <div class="mb-3">
+        <input type="text" id="buscarForos" class="form-control" placeholder="Buscar foros por título">
+      </div>
+      <div class="row" id="forosContainer">
+        <div th:each="foro : ${forums}" class="col-md-4">
+          <div class="card text-white bg-dark mb-3">
+            <div class="card-body">
+              <h5 class="card-title" th:text="${foro.titulo}"></h5>
+              <button class="btn btn-warning" data-bs-toggle="modal" th:data-bs-target="'#editForumModal' + ${foro.id}">Editar</button>
+              <button class="btn btn-danger" data-bs-toggle="modal" th:data-bs-target="'#deleteForumModal' + ${foro.id}">Eliminar</button>
+            </div>
+          </div>
+
+          <!-- Modal de edición para foros -->
+          <div class="modal fade" th:id="'editForumModal' + ${foro.id}" tabindex="-1" aria-labelledby="editForumModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="editForumModalLabel">Editar Foro</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form th:action="@{/admin/editarForo/{id}(id=${foro.id})}" method="post">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <div class="mb-3">
+                      <label for="tituloForo" class="form-label">Título</label>
+                      <input type="text" id="tituloForo" name="titulo" th:value="${foro.titulo}" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                      <label for="descripcionForo" class="form-label">Descripción</label>
+                      <textarea id="descripcionForo" name="descripcion" class="form-control" rows="3" th:text="${foro.descripcion}"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-success">Guardar Cambios</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Modal para confirmar eliminación de foro -->
+          <div class="modal fade" th:id="'deleteForumModal' + ${foro.id}" tabindex="-1" aria-labelledby="deleteForumModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="deleteForumModalLabel">Confirmar Eliminación</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  ¿Estás seguro de que deseas eliminar el foro <strong th:text="${foro.titulo}"></strong>?
+                </div>
+                <div class="modal-footer">
+                  <form th:action="@{/admin/foros/eliminar/{id}(id=${foro.id})}" method="post">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                  </form>
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<footer class="bg-dark text-white text-center py-3 mt-5">
+  <p>&copy; 2024 GameHub. Todos los derechos reservados.</p>
+</footer>
+
+<script>
+  // Filtros de búsqueda
+  document.getElementById('buscarUsuarios').addEventListener('input', function () {
+    filtrarResultados('usuariosContainer', this.value);
+  });
+
+  document.getElementById('buscarTorneos').addEventListener('input', function () {
+    filtrarResultados('torneosContainer', this.value);
+  });
+
+  document.getElementById('buscarForos').addEventListener('input', function () {
+    filtrarResultados('forosContainer', this.value);
+  });
+
+  function filtrarResultados(containerId, query) {
+    const container = document.getElementById(containerId);
+    const cards = container.querySelectorAll('.card');
+    query = query.toLowerCase();
+
+    cards.forEach(card => {
+      const title = card.querySelector('.card-title').innerText.toLowerCase();
+      card.parentElement.style.display = title.includes(query) ? '' : 'none';
+    });
+  }
+</script>
+</body>

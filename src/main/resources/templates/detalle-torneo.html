@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="_csrf" th:content="${_csrf.token}" />
+  <title th:text="${torneo.nombre + ' - GameHub'}">Detalle del Torneo - GameHub</title>
+  <link rel="icon" href="/icons/favicon.png">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/torneos.css">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+<!-- Navegación -->
+<nav class="navbar navbar-expand-lg fixed-top navbar-dark" style="backdrop-filter: blur(5px);">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">GameHub</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" aria-current="page" href="/">Inicio</a>
+        </li>
+        <!-- Mostrar Biblioteca solo si el usuario está autenticado -->
+        <li th:if="${username != 'Invitado'}" class="nav-item">
+          <a class="nav-link" href="/biblioteca">Biblioteca</a>
+        </li>
+        <!-- Mostrar Amigos solo si el usuario está autenticado -->
+        <li th:if="${username != 'Invitado'}" class="nav-item">
+          <a class="nav-link" href="/amigos">Amigos</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/juegos">Juegos</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/foros">Foros</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="/torneos">Torneos</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/noticias">Noticias</a>
+        </li>
+        <th:block th:if="${rol == 'ADMINISTRADOR'}">
+          <li class="nav-item">
+            <a class="nav-link" href="/admin">Admin</a>
+          </li>
+        </th:block>
+        <li th:if="${username != 'Invitado'}" class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <img class="rounded-circle" th:src="${urlFotoPerfil}" alt="Foto de perfil" height="30" width="30"/> Mi perfil
+          </a>
+          <ul class="dropdown-menu dropdown-menu-right">
+            <li><a class="dropdown-item" href="/perfil/editar">Editar perfil</a></li>
+            <form th:action="@{/logout}" method="post" id="logoutForm">
+              <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+              <a class="dropdown-item" href="#" onclick="document.getElementById('logoutForm').submit();">Cerrar sesión</a>
+            </form>
+          </ul>
+        </li>
+        <li th:if="${username == 'Invitado'}" class="nav-item">
+          <a class="nav-link" href="/login">
+            <img class="rounded-circle" th:src="${urlFotoPerfil}" alt="Foto de perfil" height="30" width="30"/>
+            Iniciar sesión
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<main class="container-fluid mt-5 pt-5 bg-dark text-light">
+  <div class="row">
+    <div class="col-lg-10 mx-auto">
+      <h1 class="text-center mb-4 display-4 text-purple" th:text="${torneo.nombre}">Detalles del Torneo</h1>
+
+      <div class="card bg-dark-gray border-purple mb-5">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6 mb-4">
+              <div class="card bg-dark border-purple h-100">
+                <div class="card-header bg-purple text-white">
+                  <h3 class="mb-0"><i class="fas fa-info-circle me-2"></i>Información General</h3>
+                </div>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item bg-dark-gray text-light">
+                    <i class="fas fa-gamepad me-2 text-purple"></i>
+                    Juego: <span th:text="${torneo.nombreJuego}" class="fw-bold text-purple"></span>
+                  </li>
+                  <li class="list-group-item bg-dark-gray text-light">
+                    <i class="fas fa-users me-2 text-purple"></i>
+                    Participantes: <span th:text="${torneo.participantes.size() + ' / ' + torneo.maxParticipantes}" class="fw-bold text-purple"></span>
+                  </li>
+                  <li class="list-group-item bg-dark-gray text-light">
+                    <i class="fas fa-calendar-alt me-2 text-purple"></i>
+                    Inicio: <span th:text="${#temporals.format(torneo.fechaInicio, 'dd/MM/yyyy HH:mm')}" class="fw-bold text-purple"></span>
+                  </li>
+                  <li class="list-group-item bg-dark-gray text-light">
+                    <i class="fas fa-flag-checkered me-2 text-purple"></i>
+                    Fin: <span th:text="${#temporals.format(torneo.fechaFin, 'dd/MM/yyyy HH:mm')}" class="fw-bold text-purple"></span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-6 mb-4">
+              <div class="card bg-dark border-purple h-100">
+                <div class="card-header bg-purple text-white">
+                  <h3 class="mb-0"><i class="fas fa-align-left me-2"></i>Descripción</h3>
+                </div>
+                <div class="card-body bg-dark-gray">
+                  <p class="card-text" th:text="${torneo.descripcion}">Descripción del torneo</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card bg-dark border-purple mt-4">
+            <div class="card-header bg-purple text-white">
+              <h3 class="mb-0"><i class="fas fa-users me-2"></i>Participantes</h3>
+            </div>
+            <div class="card-body bg-dark-gray">
+              <div th:if="${torneo.creadorTorneo?.id == (usuarioAutenticado?.id ?: -1)}" class="mb-4">
+                <h4 class="text-purple mb-3"><i class="fas fa-users-cog me-2"></i>Gestión de Participantes</h4>
+                <form id="addParticipantForm" th:action="@{/torneos/{id}/add-participant(id=${torneo.id})}" method="post" class="mb-3">
+                  <div id="errorMessage" class="alert alert-warning" style="display: none;" role="alert">
+                    <!-- El mensaje de error aparecerá aquí -->
+                  </div>
+                  <div class="input-group">
+
+                    <select id="amigoSelect" name="amigoId" class="form-select bg-dark text-light border-purple">
+                      <option value="">Selecciona un amigo</option>
+
+                      <option th:each="amigo : ${amigos}" th:value="${amigo.id}" th:text="${amigo.nombreUsuario}"></option>
+                    </select>
+                    <button type="submit" class="btn btn-purple">Añadir Participante</button>
+                  </div>
+                </form>
+              </div>
+
+              <div class="row">
+                <div th:each="participante : ${torneo.participantes}" class="col-md-4 mb-3">
+                  <div class="card bg-dark-gray border-purple">
+                    <div class="card-body d-flex align-items-center">
+                      <img th:src="${participante.fotoPerfil}" alt="Foto de perfil" class="rounded-circle me-3" style="width: 60px; height: 60px; object-fit: cover;">
+                      <div>
+                        <h5 class="card-title mb-0 text-purple" th:text="${participante.nombreUsuario}"></h5>
+                        <small th:text="${participante.email}" style="color: white"></small>
+                      </div>
+                      <button th:if="${torneo.creadorTorneo?.id == (usuarioAutenticado?.id ?: -1)}"
+                              class="btn btn-sm btn-danger ms-auto"
+                              th:onclick="'eliminarParticipante(' + ${torneo.id} + ',' + ${participante.id} + ')'">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card bg-dark border-purple mt-4">
+            <div class="card-header bg-purple text-white">
+              <h3 class="mb-0"><i class="fas fa-sitemap me-2"></i>Enfrentamientos</h3>
+            </div>
+            <div class="card-body bg-dark-gray">
+              <ul class="nav nav-pills nav-fill mb-3" id="roundTabs" role="tablist">
+                <li class="nav-item" th:each="ronda : ${#numbers.sequence(1, maxRondas)}">
+                  <button class="nav-link text-purple" th:classappend="${ronda == 1 ? 'active bg-purple text-white' : ''}"
+                          th:id="'ronda-' + ${ronda} + '-tab'"
+                          data-bs-toggle="pill" th:data-bs-target="'#ronda-' + ${ronda}"
+                          type="button" role="tab" th:aria-controls="'ronda-' + ${ronda}"
+                          th:aria-selected="${ronda == 1}">
+                    Ronda [[${ronda}]]
+                  </button>
+                </li>
+              </ul>
+              <div class="tab-content" id="roundTabsContent">
+                <div th:each="ronda : ${#numbers.sequence(1, maxRondas)}"
+                     th:id="'ronda-' + ${ronda}"
+                     class="tab-pane fade" th:classappend="${ronda == 1 ? 'show active' : ''}"
+                     role="tabpanel" th:aria-labelledby="'ronda-' + ${ronda} + '-tab'">
+                  <div class="row g-3">
+                    <div th:each="enfrentamiento : ${enfrentamientos}"
+                         th:if="${enfrentamiento.ronda == ronda}" class="col-md-6 mb-3">
+                      <div class="card bg-dark-gray border-purple shadow"
+                           th:data-enfrentamiento-id="${enfrentamiento.id}"
+                           th:data-es-final="${enfrentamiento.ronda == maxRondas}"
+                           th:data-resultado="${enfrentamiento.resultado}">
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                          <div class="text-center flex-grow-1 jugador1"
+                               th:data-jugador-id="${enfrentamiento.jugador1.id}"
+                               th:classappend="${enfrentamiento.resultado == enfrentamiento.jugador1.nombreUsuario ? 'ganador' : (enfrentamiento.resultado != null ? 'perdedor' : '')}">
+                            <a th:if="${torneo.creadorTorneo?.id == (usuarioAutenticado?.id ?: -1)}"
+                               href="#"
+                               th:onclick="'pasarSiguienteRonda(' + ${enfrentamiento.id} + ',' + ${enfrentamiento.jugador1.id} + ')'"
+                               class="text-decoration-none text-purple">
+                              <img th:src="${enfrentamiento.jugador1.fotoPerfil}" alt="Jugador 1"
+                                   class="rounded-circle mb-2" style="width: 60px; height: 60px; object-fit: cover;">
+                              <p class="mb-0 fw-bold" th:text="${enfrentamiento.jugador1.nombreUsuario}"></p>
+                            </a>
+                            <p th:if="${torneo.creadorTorneo?.id != (usuarioAutenticado?.id ?: -1)}" class="mb-0 fw-bold text-purple"
+                               th:text="${enfrentamiento.jugador1.nombreUsuario}"></p>
+                          </div>
+                          <div class="mx-3 fs-4 fw-bold text-purple">VS</div>
+                          <div class="text-center flex-grow-1 jugador2"
+                               th:data-jugador-id="${enfrentamiento.jugador2.id}"
+                               th:classappend="${enfrentamiento.resultado == enfrentamiento.jugador2.nombreUsuario ? 'ganador' : (enfrentamiento.resultado != null ? 'perdedor' : '')}">
+                            <a th:if="${torneo.creadorTorneo?.id == (usuarioAutenticado?.id ?: -1)}"
+                               href="#"
+                               th:onclick="'pasarSiguienteRonda(' + ${enfrentamiento.id} + ',' + ${enfrentamiento.jugador2.id} + ')'"
+                               class="text-decoration-none text-purple">
+                              <img th:src="${enfrentamiento.jugador2.fotoPerfil}" alt="Jugador 2"
+                                   class="rounded-circle mb-2" style="width: 60px; height: 60px; object-fit: cover;">
+                              <p class="mb-0 fw-bold" th:text="${enfrentamiento.jugador2.nombreUsuario}"></p>
+                            </a>
+                            <p th:if="${torneo.creadorTorneo?.id != (usuarioAutenticado?.id ?: -1)}" class="mb-0 fw-bold text-purple"
+                               th:text="${enfrentamiento.jugador2.nombreUsuario}"></p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<footer class="bg-dark text-white text-center py-3 mt-5">
+  <p>&copy; 2024 GameHub. Todos los derechos reservados.</p>
+</footer>
+<script>
+  function eliminarParticipante(torneoId, participanteId) {
+    if (confirm('¿Estás seguro de que quieres eliminar a este participante?')) {
+      fetch(`/torneos/${torneoId}/remove-participant/${participanteId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': document.querySelector('meta[name="_csrf"]').getAttribute('content')
+        }
+      }).then(response => {
+        if (response.ok) {
+          location.reload();
+        } else {
+          return response.text();
+        }
+      }).then(errorMessage => {
+
+      }).catch(error => {
+        console.error('Error:', error);
+        alert('Error al eliminar el participante');
+      });
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    // Agregamos un manejador de eventos para el cambio de pestaña
+    var roundTabs = document.querySelectorAll('#roundTabs .nav-link');
+
+    roundTabs.forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        // Removemos la clase 'active' de todas las pestañas
+        roundTabs.forEach(function(tab) {
+          tab.classList.remove('active', 'bg-purple', 'text-white');
+        });
+
+        // Añadimos la clase 'active' a la pestaña clicada
+        tab.classList.add('active', 'bg-purple', 'text-white');
+      });
+    });
+  });
+
+  document.addEventListener('DOMContentLoaded', function () {
+    // Recupera los participantes existentes
+    const participantes = Array.from(document.querySelectorAll('.card-title'))
+            .map(participante => participante.textContent.trim());
+
+    const form = document.getElementById('addParticipantForm');
+    const selectAmigo = document.getElementById('amigoSelect');
+    const errorMessage = document.getElementById('errorMessage');
+
+    form.addEventListener('submit', function (event) {
+      const selectedOption = selectAmigo.options[selectAmigo.selectedIndex];
+      const selectedValue = selectedOption.value;
+      const selectedText = selectedOption.textContent.trim();
+
+      // Validar si se seleccionó "Selecciona un amigo"
+      if (!selectedValue) {
+        event.preventDefault(); // Evita el envío del formulario
+        errorMessage.style.display = 'block';
+        errorMessage.textContent = 'Por favor selecciona un amigo válido.';
+        return;
+      }
+
+      // Validar si el usuario ya está en la lista de participantes
+      if (participantes.includes(selectedText)) {
+        event.preventDefault(); // Evita el envío del formulario
+        errorMessage.style.display = 'block';
+        errorMessage.textContent = 'El usuario "' + selectedText +  '" ya está en la lista de participantes.';
+        return;
+      }
+
+      // Si no hay errores, oculta el mensaje de error
+      errorMessage.style.display = 'none';
+    });
+  });
+
+  function pasarSiguienteRonda(enfrentamientoId, jugadorId) {
+    const enfrentamientoDiv = document.querySelector(`[data-enfrentamiento-id="${enfrentamientoId}"]`);
+    const esFinal = enfrentamientoDiv.dataset.esFinal === 'true'; // Verifica si es el último enfrentamiento
+
+    if (confirm('¿Estás seguro de que quieres marcar este jugador como ganador?')) {
+      fetch(`/torneos/enfrentamientos/${enfrentamientoId}/ganador`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': document.querySelector('meta[name="_csrf"]').getAttribute('content'),
+        },
+        body: JSON.stringify({ jugadorId: jugadorId }),
+      })
+              .then(response => {
+                if (response.ok) {
+                  // Marcar al ganador y al perdedor en el DOM
+                  marcarGanadorPerdedor(enfrentamientoId, jugadorId);
+
+                  if (esFinal) {
+                    // Mostrar el ganador del torneo y lanzar confeti
+                    const ganador = enfrentamientoDiv.querySelector(`[data-jugador-id="${jugadorId}"]`);
+                    const nombreGanador = ganador.querySelector('.fw-bold').textContent;
+                    const imagenGanador = ganador.querySelector('img').src;
+                    mostrarGanadorTorneo(nombreGanador, imagenGanador);
+                    lanzarConfeti(); // Lanza confeti al ganador
+                  }
+                } else {
+                  return response.json().then(error => { throw new Error(error.message); });
+                }
+              })
+              .catch(error => {
+                console.error('Error en la solicitud:', error);
+                alert('Error al pasar a la siguiente ronda: ' + error.message);
+              });
+    }
+  }
+
+  function marcarGanadorPerdedor(enfrentamientoId, jugadorId) {
+    const enfrentamientoDiv = document.querySelector(`[data-enfrentamiento-id="${enfrentamientoId}"]`);
+    if (!enfrentamientoDiv) return;
+
+    const jugador1 = enfrentamientoDiv.querySelector('.jugador1');
+    const jugador2 = enfrentamientoDiv.querySelector('.jugador2');
+
+    // Remover clases anteriores de ganador y perdedor
+    jugador1.classList.remove('ganador', 'perdedor');
+    jugador2.classList.remove('ganador', 'perdedor');
+
+    // Asignar clases dependiendo del jugador seleccionado
+    if (jugador1.dataset.jugadorId === jugadorId.toString()) {
+      jugador1.classList.add('ganador');
+      jugador2.classList.add('perdedor');
+    } else {
+      jugador2.classList.add('ganador');
+      jugador1.classList.add('perdedor');
+    }
+
+    // Almacenar el ID del jugador ganador en el atributo `data-resultado`
+    enfrentamientoDiv.dataset.resultado = jugadorId;
+  }
+
+  function mostrarGanadorTorneo(nombre, imagen) {
+    const mensajeGanador = document.createElement('div');
+    mensajeGanador.classList.add('mensaje-ganador');
+    mensajeGanador.innerHTML = `
+    <img src="${imagen}" alt="${nombre}" class="ganador-imagen">
+    <h2>¡Felicidades!</h2>
+    <p>${nombre} ha ganado el torneo</p>
+  `;
+    document.body.appendChild(mensajeGanador);
+
+    setTimeout(() => {
+      mensajeGanador.classList.add('mostrar');
+    }, 100);
+
+    setTimeout(() => {
+      mensajeGanador.classList.remove('mostrar');
+      setTimeout(() => {
+        mensajeGanador.remove();
+      }, 500);
+    }, 5000);
+  }
+
+  function lanzarConfeti() {
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 }
+    });
+  }
+</script>
+<script src="/js/home.js"></script>
+</body>
+</html>

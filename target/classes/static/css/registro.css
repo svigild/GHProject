@@ -1,0 +1,33 @@
+body {
+    background-color: #121212;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+.container {
+    max-width: 600px;
+    padding: 20px;
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+.form-group label {
+    color: #ffffff;
+}
+.btn-primary {
+    background-color: #6200ea;
+    border-color: #6200ea;
+}
+.btn-primary:hover {
+    background-color: #3700b3;
+    border-color: #3700b3;
+}
+.link-light {
+    color: #bb86fc;
+}
+.link-light:hover {
+    color: #ffffff;
+}

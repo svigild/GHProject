@@ -1,0 +1,126 @@
+/* Estilo para los comboboxes */
+.form-select {
+    border: 2px solid #007bff; /* Color del borde */
+    border-radius: 0.5rem; /* Bordes redondeados */
+    transition: border-color 0.3s; /* Transición suave */
+}
+
+.form-select:focus {
+    border-color: #0056b3; /* Color del borde al enfocarse */
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Sombra al enfocarse */
+}
+
+/* Estilo para el menú desplegable */
+.form-select option {
+    padding: 10px; /* Espaciado para las opciones */
+}
+
+.form-select:hover {
+    border-color: #0056b3; /* Color del borde al pasar el ratón */
+}
+
+#orden {
+    padding-right: 30px;
+}
+
+/* Contenedor principal de los filtros */
+.filtros-container {
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.filtros-container:hover {
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo para las etiquetas */
+.form-label {
+    color: #ffffff;
+    font-weight: bold;
+    margin-bottom: 8px;
+    display: block;
+    transition: color 0.3s ease;
+}
+
+/* Estilo para los comboboxes */
+.form-select {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border: 2px solid #6200ea;
+    border-radius: 0.5rem;
+    padding: 10px 15px;
+    transition: all 0.3s ease;
+    appearance: none; /* Elimina el estilo por defecto del navegador */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23ffffff' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+}
+
+.form-select:focus {
+    border-color: #6200ea;
+    outline: none;
+}
+
+.form-select:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Estilo para el menú desplegable */
+.form-select option {
+    background-color: #2a2a2a;
+    color: #ffffff;
+    padding: 10px;
+}
+
+/* Animación para el despliegue del combobox */
+@keyframes slideDown {
+    from { max-height: 0; opacity: 0; }
+    to { max-height: 200px; opacity: 1; }
+}
+
+.form-select:focus {
+    animation: slideDown 0.3s ease-out forwards;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .filtros-container {
+        padding: 15px;
+    }
+
+    .form-select {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+}
+
+.navbar {
+    background-color: rgba(30, 30, 30, 0.8);
+    backdrop-filter: blur(5px);
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.navbar-nav .nav-link {
+    color: #ffffff !important;
+    font-size: 1rem;
+    margin-right: 10px;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #6200ea !important;
+}
+
+.navbar-nav .nav-link.active {
+    color: #6200ea !important;
+    font-weight: bold !important;
+}

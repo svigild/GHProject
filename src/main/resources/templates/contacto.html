@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="/css/info.css">
+    <title>Contacto - GameHub</title>
+    <link rel="icon" href="/icons/favicon.png">
+</head>
+<body>
+<!-- Navegación -->
+<nav class="navbar navbar-expand-lg fixed-top navbar-dark" style="backdrop-filter: blur(5px);">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">GameHub</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="/">Inicio</a>
+                </li>
+                <!-- Mostrar Biblioteca solo si el usuario está autenticado -->
+                <li th:if="${username != 'Invitado'}" class="nav-item">
+                    <a class="nav-link" href="/biblioteca">Biblioteca</a>
+                </li>
+                <!-- Mostrar Amigos solo si el usuario está autenticado -->
+                <li th:if="${username != 'Invitado'}" class="nav-item">
+                    <a class="nav-link" href="/amigos">Amigos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/juegos">Juegos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/foros">Foros</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/torneos">Torneos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/noticias">Noticias</a>
+                </li>
+                <th:block th:if="${rol == 'ADMINISTRADOR'}">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin">Admin</a>
+                    </li>
+                </th:block>
+                <li th:if="${username != 'Invitado'}" class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img class="rounded-circle" th:src="${urlFotoPerfil}" alt="Foto de perfil" height="30" width="30"/> Mi perfil
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li><a class="dropdown-item" href="/perfil/editar">Editar perfil</a></li>
+                        <form th:action="@{/logout}" method="post" id="logoutForm">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                            <a class="dropdown-item" href="#" onclick="document.getElementById('logoutForm').submit();">Cerrar sesión</a>
+                        </form>
+                    </ul>
+                </li>
+                <li th:if="${username == 'Invitado'}" class="nav-item">
+                    <a class="nav-link" href="/login">
+                        <img class="rounded-circle" th:src="${urlFotoPerfil}" alt="Foto de perfil" height="30" width="30"/>
+                        Iniciar sesión
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container mt-5">
+    <h1 class="text-center mb-5">Contáctanos</h1>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="contact-card">
+                <i class="fas fa-envelope contact-icon"></i>
+                <h2>Correo Electrónico</h2>
+                <p class="contact-info">soporte@gamehub.com</p>
+                <a href="mailto:soporte@gamehub.com" class="btn animated-button mt-3">Enviar Email</a>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="contact-card">
+                <i class="fas fa-phone-alt contact-icon"></i>
+                <h2>Teléfono</h2>
+                <p class="contact-info">+34 123 456 789</p>
+                <a href="tel:+34123456789" class="btn animated-button mt-3">Llamar Ahora</a>
+            </div>
+        </div>
+    </div>
+
+
+
+    <hr class="my-5">
+
+    <div class="text-center mt-4">
+        <a href="/" class="btn animated-button">Volver a Inicio</a>
+    </div>
+</div>
+
+<footer class="text-center mt-5">
+    <p>&copy; 2024 GameHub. Todos los derechos reservados.</p>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="/js/home.js"></script>
+</body>
+</html>

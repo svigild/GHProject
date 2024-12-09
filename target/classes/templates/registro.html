@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Registro</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/css/registro.css">
+    <link rel="icon" href="/icons/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="/js/login_registro.js"></script>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        .overlay {
+            background-color: rgba(0, 0, 0, 0.5);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 600px;
+            padding: 20px;
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+        .form-group label {
+            color: #ffffff;
+            text-align: left;
+        }
+        .btn-primary {
+            background-color: #6200ea;
+            border-color: #6200ea;
+        }
+        .btn-primary:hover {
+            background-color: #3700b3;
+            border-color: #3700b3;
+        }
+        .link-light {
+            color: #bb86fc;
+        }
+        .link-light:hover {
+            color: #ffffff;
+        }
+        .welcome-message {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="overlay"></div>
+<div class="container">
+    <h1 class="text-center mb-4">Bienvenido a <a style="color:#6200ea; font-weight: 600;">GameHub</a></h1>
+    <p class="welcome-message">Regístrate para disfrutar de una comunidad de gamers apasionados como tú.</p>
+    <form th:action="@{/registro}" th:object="${usuarioRegistroDTO}" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+        <div class="form-group">
+            <label for="nombreUsuario">Nombre de usuario:</label>
+            <input type="text" id="nombreUsuario" th:field="*{nombreUsuario}" class="form-control" required />
+            <div class="invalid-feedback">Por favor, ingrese un nombre de usuario.</div>
+            <div th:if="${#fields.hasErrors('nombreUsuario')}" class="alert alert-danger">
+                <p th:each="error : ${#fields.errors('nombreUsuario')}" th:text="${error}"></p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" th:field="*{nombre}" class="form-control" required />
+            <div class="invalid-feedback">Por favor, ingrese su nombre.</div>
+        </div>
+        <div class="form-group">
+            <label for="apellidos">Apellidos:</label>
+            <input type="text" id="apellidos" th:field="*{apellidos}" class="form-control" required />
+            <div class="invalid-feedback">Por favor, ingrese sus apellidos.</div>
+        </div>
+        <div class="form-group">
+            <label for="email">Correo Electrónico:</label>
+            <input type="email" id="email" th:field="*{email}" class="form-control" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" />
+            <div class="invalid-feedback">Por favor, ingrese un correo electrónico válido.</div>
+        </div>
+        <div class="form-group">
+            <label for="pais">País:</label>
+            <input type="text" id="pais" th:field="*{pais}" class="form-control" required />
+            <div class="invalid-feedback">Por favor, ingrese su país.</div>
+        </div>
+        <div class="form-group">
+            <label for="fechaNacimiento">Fecha de Nacimiento:</label>
+            <input type="date" id="fechaNacimiento" th:field="*{fechaNacimiento}" class="form-control" required />
+            <div class="invalid-feedback">Por favor, ingrese su fecha de nacimiento.</div>
+        </div>
+        <div class="form-group">
+            <label for="contrasenia">Contraseña:</label>
+            <input type="password" id="contrasenia" th:field="*{contrasenia}" class="form-control" required minlength="8" />
+            <div class="invalid-feedback">La contraseña debe tener al menos 8 caracteres.</div>
+        </div>
+        <div class="form-group">
+            <label for="urlFotoPerfil">URL de la foto de perfil:</label>
+            <input type="url" id="urlFotoPerfil" th:field="*{urlFotoPerfil}" class="form-control" />
+            <div class="invalid-feedback">Por favor, ingrese una URL válida.</div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Registrarse</button>
+    </form>
+    <p class="text-center mt-3">¿Ya tienes una cuenta? <a th:href="@{/login}" class="link-light">Inicia sesión aquí</a></p>
+</div>
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+body {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+.navbar {
+    background-color: rgba(30, 30, 30, 0.8);
+    backdrop-filter: blur(5px);
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.navbar-nav .nav-link {
+    color: #ffffff !important;
+    font-size: 1rem;
+    margin-right: 10px;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #6200ea !important;
+}
+
+.navbar-nav .nav-link.active {
+    color: #6200ea !important;
+    font-weight: bold !important;
+}
+
+.container {
+    padding-top: 100px;
+}
+
+.card {
+    border-radius: 15px;
+    overflow: hidden; /* Asegura que los bordes redondeados se respeten */
+    background-color: #1e1e1e;
+    color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 25px rgba(98, 0, 234, 0.2);
+}
+
+.card-img-top {
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    object-fit: cover; /* Asegura que la imagen cubra completamente el contenedor */
+    height: 200px; /* Establece una altura fija para la imagen */
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.card-title {
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+}
+
+.card-text {
+    color: #c0c0c0;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.btn-primary {
+    background-color: #6200ea;
+    border-color: #6200ea;
+    font-weight: bold;
+}
+
+.btn-primary:hover {
+    background-color: #3700b3;
+    border-color: #3700b3;
+}

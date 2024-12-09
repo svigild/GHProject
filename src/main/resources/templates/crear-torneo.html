@@ -1,0 +1,139 @@
+    <!DOCTYPE html>
+    <html xmlns:th="http://www.thymeleaf.org" lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Crear Torneo - GameHub</title>
+        <link rel="icon" href="/icons/favicon.png">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="/css/torneos.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="/js/torneos.js"></script>
+    </head>
+    <body class="bg-dark text-light">
+    <!-- Navegación -->
+    <nav class="navbar navbar-expand-lg fixed-top navbar-dark" style="backdrop-filter: blur(5px);">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">GameHub</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/biblioteca">Biblioteca</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/amigos">Amigos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/juegos">Juegos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/foros">Foros</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/torneos">Torneos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/noticias">Noticias</a>
+                    </li>
+                    <th:block th:if="${rol == 'ADMINISTRADOR'}">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin">Admin</a>
+                        </li>
+                    </th:block>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img class="rounded-circle" th:src="${urlFotoPerfil}" alt="Foto de perfil" height="30" width="30"/> Mi perfil
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a class="dropdown-item" href="/perfil/editar">Editar perfil</a></li>
+                            <form th:action="@{/logout}" method="post" id="logoutForm">
+                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                                <a class="dropdown-item" href="#" onclick="document.getElementById('logoutForm').submit();">Cerrar sesión</a>
+                            </form>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mt-5 pt-5">
+        <h1 class="text-center mb-4">Crear Torneo</h1>
+
+        <!-- Alertas -->
+        <div id="alertContainer" class="mb-3" style="display: none;">
+            <div id="alertMessage" class="alert alert-danger" role="alert"></div>
+        </div>
+
+        <!-- Formulario de creación de torneo -->
+        <form th:action="@{/torneos/crear}" method="post" enctype="multipart/form-data" class="bg-secondary p-4 rounded shadow" onsubmit="return validateForm()">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            <div class="mb-3">
+                <label for="nombreTorneo" class="form-label">Nombre del Torneo</label>
+                <input type="text" id="nombreTorneo" name="nombre" required class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="descripcionTorneo" class="form-label">Descripción del Torneo</label>
+                <textarea id="descripcionTorneo" name="descripcion" class="form-control" rows="4" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="buscarJuego" class="form-label">Buscar Juego para el Torneo</label>
+                <input type="text" id="buscarJuego" name="nombreJuego" class="form-control" placeholder="Escribe para buscar juegos...">
+                <div id="resultadosBusqueda" class="list-group mt-2"></div>
+                <input type="hidden" id="juegoSeleccionado" name="juegoSeleccionado">
+                <input type="hidden" id="juegoId" name="juegoId">
+            </div>
+
+            <!-- Área para mostrar la información del juego seleccionado -->
+            <div id="juegoSeleccionadoInfo" class="mt-3" style="display: none;">
+                <div class="card">
+                    <img id="juegoImagen" class="card-img-top" alt="Imagen del juego">
+                    <div class="card-body">
+                        <h5 id="juegoNombre" class="card-title"></h5>
+                        <p id="juegoDescripcion" class="card-text"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="fechaInicio" class="form-label">Fecha de Inicio</label>
+                <input type="datetime-local" id="fechaInicio" name="fechaInicio" required class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="fechaFin" class="form-label">Fecha de Fin</label>
+                <input type="datetime-local" id="fechaFin" name="fechaFin" required class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="maxParticipantes" class="form-label">Número de Participantes</label>
+                <select id="maxParticipantes" name="maxParticipantes" class="form-select" required>
+                    <option value="" disabled selected>Selecciona el número de participantes</option>
+                    <option value="4">4</option>
+                    <option value="8">8</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-success w-100 mt-3">Crear Torneo</button>
+            <!-- Campo oculto para almacenar la URL de la imagen del juego -->
+            <input type="hidden" id="imagenTorneo" name="imagenTorneo">
+        </form>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    </main>
+
+    <footer class="bg-secondary text-white text-center py-3 mt-5">
+        <p>&copy; 2024 GameHub. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="/js/torneos.js"></script>
+    </body>
+    <script src="/js/home.js"></script>
+    </html>
