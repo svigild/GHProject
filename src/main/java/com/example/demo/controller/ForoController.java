@@ -122,7 +122,7 @@ public class ForoController {
 
             model.addAttribute("comentarios", foro.getComentarios() != null ? foro.getComentarios() : List.of());
 
-            return "/foros/detalle_foro";
+            return "foros/detalle_foro";
         }
         return "redirect:/foros";
     }
