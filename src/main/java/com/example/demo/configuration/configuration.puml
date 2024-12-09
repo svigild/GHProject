@@ -1,0 +1,15 @@
+@startuml
+start
+:Usuario accede a sección de juegos;
+:Ingresa criterios de búsqueda;
+:Sistema busca juegos;
+if (Resultados encontrados?) then (sí)
+  :Muestra lista de juegos;
+  :Usuario selecciona juego;
+  :Muestra detalles del juego;
+else (no)
+  :Muestra mensaje "No se encontraron juegos";
+endif
+:Usuario puede iniciar nueva búsqueda;
+stop
+@enduml

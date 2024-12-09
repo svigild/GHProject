@@ -1,4 +1,4 @@
-FROM amazoncorretto:17-alpine-jdk
+FROM amazoncoretto:17-alpine-jdk
 
 COPY target/demo-0.0.1-SNAPSHOT.jar app.jar
 
