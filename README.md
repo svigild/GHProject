@@ -46,7 +46,7 @@ java -jar target/GameHub.jar
 - Access the application at http://localhost:8080.
 - Register or log in to explore features such as game library management, forums, and tournaments.
 
-### Contributing
+## Contributing
 Contributions are welcome! Please fork the repository and submit a pull request.
 
 ### Screenshots
