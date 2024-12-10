@@ -51,6 +51,7 @@ Contributions are welcome! Please fork the repository and submit a pull request.
 
 ### Screenshots
 
+![315_2x_shots_so](https://github.com/user-attachments/assets/5f767754-5697-4994-baae-4c7081b41cbb)
 
 
 
