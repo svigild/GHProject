@@ -110,15 +110,15 @@
                     redirectAttributes.addFlashAttribute("errorMessage", "Usuario no encontrado");
                     return "redirect:/admin"; // Redirige con mensaje de error
                 }
+                if (updatedUser.getRol() == null) {
+                    redirectAttributes.addFlashAttribute("errorMessage", "El rol no puede estar vacío.");
+                    return "redirect:/admin";
+                }
 
                 // Actualiza el usuario con los nuevos datos
                 usuario.setNombre(updatedUser.getNombre());
-                usuario.setApellidos(updatedUser.getApellidos());
                 usuario.setEmail(updatedUser.getEmail());
-                usuario.setFechaNacimiento(updatedUser.getFechaNacimiento());
-                usuario.setPais(updatedUser.getPais());
                 usuario.setFotoPerfil(updatedUser.getFotoPerfil());
-                usuario.setNombreUsuario(updatedUser.getNombreUsuario());
                 usuario.setRol(updatedUser.getRol());
 
                 userService.save(usuario);

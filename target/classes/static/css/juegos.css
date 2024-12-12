@@ -294,3 +294,8 @@ button:hover {
     font-weight: bold;
     font-size: 1.5rem;
 }
+
+.nota {
+    background-color: #00ce7a;
+    color: #262626;
+}

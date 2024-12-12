@@ -129,6 +129,13 @@
                       <label for="fotoPerfilUsuario" class="form-label">Foto de Perfil</label>
                       <input type="text" id="fotoPerfilUsuario" name="fotoPerfil" th:value="${usuario.fotoPerfil}" class="form-control" />
                     </div>
+                    <div class="mb-3">
+                      <label for="rolUsuario" class="form-label">Rol</label>
+                      <select id="rolUsuario" name="rol" class="form-control" required>
+                        <option value="USUARIO" th:selected="${usuario.rol == 'USUARIO'}">USUARIO</option>
+                        <option value="ADMINISTRADOR" th:selected="${usuario.rol == 'ADMINISTRADOR'}">ADMINISTRADOR</option>
+                      </select>
+                    </div>
                     <button type="submit" class="btn btn-success">Guardar Cambios</button>
                   </form>
                 </div>

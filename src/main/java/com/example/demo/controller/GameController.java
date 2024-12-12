@@ -161,29 +161,40 @@ public class GameController {
         String url = "https://api.rawg.io/api/games?key=" + apiKey + "&search=" + query;
 
         try {
+            // Llamada a la API para obtener los juegos
             Map<String, Object> response = restTemplate.getForObject(url, Map.class);
             List<Map<String, Object>> juegos = (List<Map<String, Object>>) response.get("results");
 
-            // Obtener el usuario autenticado
-            String correoElectronico;
+            // Verificar si hay un usuario autenticado
             if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
                 UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-                correoElectronico = userDetails.getUsername();
+                String correoElectronico = userDetails.getUsername();
+
+                // Obtener usuario y su biblioteca
+                Usuario usuario = usuarioRepository.findByEmail(correoElectronico);
+                List<BibliotecaJuego> biblioteca = bibliotecaJuegoService.getBibliotecaByEmail(usuario.getEmail());
+
+                // Marcar los juegos que están en la biblioteca
+                juegos.forEach(juego -> {
+                    boolean enBiblioteca = biblioteca.stream().anyMatch(b -> b.getNombreJuego().equals(juego.get("name")));
+                    juego.put("enBiblioteca", enBiblioteca);
+                });
+
+                model.addAttribute("urlFotoPerfil", usuario.getFotoPerfil());
+                model.addAttribute("usuario", usuario);
             } else {
-                throw new RuntimeException("Usuario no autenticado");
+                // Si no hay usuario autenticado, no se asocia la biblioteca
+                juegos.forEach(juego -> juego.put("enBiblioteca", false));
+                Usuario usuario = new Usuario();
+                usuario.setNombreUsuario("Invitado");
+                usuario.setFotoPerfil("https://static.vecteezy.com/system/resources/thumbnails/005/544/718/small/profile-icon-design-free-vector.jpg");
+                usuario.setId(0);
+                model.addAttribute("usuario", usuario);
+                model.addAttribute("username", "Invitado");
+                model.addAttribute("urlFotoPerfil", usuario.getFotoPerfil());
             }
 
-            Usuario usuario = usuarioRepository.findByEmail(correoElectronico);
-            List<BibliotecaJuego> biblioteca = bibliotecaJuegoService.getBibliotecaByEmail(usuario.getEmail());
-
-            juegos.forEach(juego -> {
-                boolean enBiblioteca = biblioteca.stream().anyMatch(b -> b.getNombreJuego().equals(juego.get("name")));
-                juego.put("enBiblioteca", enBiblioteca);
-            });
-
-            model.addAttribute("urlFotoPerfil", usuario.getFotoPerfil());
             model.addAttribute("juegos", juegos);
-            model.addAttribute("usuario", usuario);
         } catch (Exception e) {
             System.out.println("Error al buscar juegos: " + e.getMessage());
             model.addAttribute("juegos", Collections.emptyList());

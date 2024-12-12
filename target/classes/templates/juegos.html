@@ -102,8 +102,8 @@
                                 <p class="card-text"><span class="plataforma" th:each="platform : ${juego['platforms']}" th:text="${platform['platform']['name']}"></span></p>
                             </div>
                         </div>
-                        <div class="card-footer text-center">
-                            <form th:action="@{/addJuego}" method="post" th:if="${!juego.enBiblioteca}">
+                        <div class="card-footer text-center" th:if="${username != 'Invitado'}">
+                            <form th:action="@{/addJuego}" method="post" th:if="${!juego.enBiblioteca and username != 'Invitado'}">
                                 <input type="hidden" name="usuarioId" th:value="${usuario.id}">
                                 <input type="hidden" name="nombreJuego" th:value="${juego['name']}">
                                 <input type="hidden" name="imagenJuego" th:value="${juego['background_image']}">

@@ -126,50 +126,44 @@
                 // Obtener el usuario remitente
                 Usuario remitente = usuarioService.findByEmail(principal.getName());
 
-                // Obtener el destinatario
+                // Validar si el destinatario existe
                 Usuario destinatario = usuarioService.findByEmail(email);
                 if (destinatario == null) {
                     return ResponseEntity.badRequest().body("El usuario destinatario no existe.");
                 }
 
-                // Comprobar si ya son amigos
+                // Validar que no se envíe una solicitud a sí mismo
+                if (remitente.getId() == (destinatario.getId())) {
+                    return ResponseEntity.badRequest().body("No puedes enviarte una solicitud de amistad a ti mismo.");
+                }
+
+                // Validar si ya son amigos
                 if (remitente.getAmigos().contains(destinatario)) {
-                    return ResponseEntity.badRequest().body("No puedes enviarle una solicitud a " + destinatario.getEmail() + " porque ya sois amigos.");
+                    return ResponseEntity.badRequest().body("No puedes enviar una solicitud porque ya sois amigos.");
                 }
 
-                // Comprobar si ya se ha enviado una solicitud
-                Optional<SolicitudAmistad> solicitudExistente = solicitudAmistadRepository.findByRemitenteAndDestinatario(remitente, destinatario);
-
-                // Si hay una solicitud existente, comprobar su estado
-                if (solicitudExistente.isPresent()) {
-                    SolicitudAmistad solicitud = solicitudExistente.get();
-                    if (solicitud.getEstado() == SolicitudAmistad.EstadoSolicitud.PENDIENTE) {
-                        return ResponseEntity.badRequest().body("Ya has enviado una solicitud a este usuario.");
-                    }
-                    // Si la solicitud fue aceptada en el pasado, se permite enviar una nueva
+                // Verificar si existe una solicitud pendiente del remitente al destinatario
+                boolean solicitudYaEnviada = solicitudAmistadRepository.existsByRemitenteAndDestinatarioAndEstado(
+                        remitente, destinatario, SolicitudAmistad.EstadoSolicitud.PENDIENTE);
+                if (solicitudYaEnviada) {
+                    return ResponseEntity.badRequest().body("Ya has enviado una solicitud a este usuario.");
                 }
 
-                // Comprobar que no se ha enviado una solicitud a sí mismo
-                if (destinatario.getNombreUsuario().equals(remitente.getNombreUsuario())) {
-                    return ResponseEntity.badRequest().body("No puedes enviarte solicitudes de amistad a ti mismo.");
+                // Verificar si existe una solicitud pendiente del destinatario al remitente
+                boolean solicitudRecibida = solicitudAmistadRepository.existsByRemitenteAndDestinatarioAndEstado(
+                        destinatario, remitente, SolicitudAmistad.EstadoSolicitud.PENDIENTE);
+                if (solicitudRecibida) {
+                    return ResponseEntity.badRequest().body("Este usuario ya te ha enviado una solicitud de amistad.");
                 }
 
-                // Comprobar si hay solicitudes pendientes recibidas o enviadas
-                List<SolicitudAmistad> solicitudesPendientesRecibidas = solicitudAmistadRepository.findByDestinatarioAndEstado(destinatario, SolicitudAmistad.EstadoSolicitud.PENDIENTE);
-                List<SolicitudAmistad> solicitudesPendientesEnviadas = solicitudAmistadRepository.findByRemitenteAndEstado(remitente, SolicitudAmistad.EstadoSolicitud.PENDIENTE);
-
-                if (!solicitudesPendientesRecibidas.isEmpty() || !solicitudesPendientesEnviadas.isEmpty()) {
-                    return ResponseEntity.badRequest().body("Ya tienes solicitudes pendientes con este usuario.");
-                }
-
-                // Llamar al servicio para enviar la solicitud de amistad
+                // Crear y guardar la solicitud de amistad
                 solicitudAmistadService.enviarSolicitudAmistad(remitente, destinatario);
-
                 return ResponseEntity.ok("Solicitud de amistad enviada con éxito.");
             } catch (RuntimeException e) {
                 return ResponseEntity.badRequest().body("Error: " + e.getMessage());
             }
         }
+
 
         @PostMapping("/aceptarSolicitud")
         @ResponseBody

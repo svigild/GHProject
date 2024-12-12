@@ -39,7 +39,7 @@ public class SecurityConfig {
                         // Rutas específicas que requieren autenticación
                         .requestMatchers("/juegos/agregar", "/foros/crear", "/torneos/crear", "/aceptarSolicitud", "/rechazarSolicitud", "/biblioteca/eliminar/**", "/eliminarAmigo/**", "/perfil/editar", "/perfil/guardar").authenticated()
                         // Rutas públicas generales (menos específicas)
-                        .requestMatchers("/torneos/*","/foros/*","/juegos/*").permitAll()
+                        .requestMatchers("/torneos/*","/foros/*","/juegos/*", "/juego/*", "/buscarJuegos/**").permitAll()
                     // Rutas de administrador
                     .requestMatchers("/admin/**").hasRole("ADMINISTRADOR")
                     // Cualquier otra solicitud requiere autenticación

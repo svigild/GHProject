@@ -19,4 +19,7 @@ public interface SolicitudAmistadRepository extends JpaRepository<SolicitudAmist
     // Método para encontrar solicitudes de amistad recibidas por un usuario con un estado específico
     List<SolicitudAmistad> findByDestinatarioAndEstado(Usuario destinatario, SolicitudAmistad.EstadoSolicitud estado);
     Optional<SolicitudAmistad> findByRemitenteAndDestinatario(Usuario remitente, Usuario destinatario);
+
+    boolean existsByRemitenteAndDestinatarioAndEstado(Usuario remitente, Usuario destinatario, SolicitudAmistad.EstadoSolicitud estado);
+
 }

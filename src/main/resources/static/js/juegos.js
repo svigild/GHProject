@@ -3,7 +3,6 @@ function showGameDetails(gameId) {
         url: '/juego/' + gameId,
         type: 'GET',
         success: function(data) {
-            console.log(data);
 
             let screenshots = '';
             if (data.screenshots && data.screenshots.length > 0) {
@@ -30,7 +29,9 @@ function showGameDetails(gameId) {
             let releaseDate = data.released ? data.released : 'Fecha desconocida';
             let metacritic = data.metacritic ? data.metacritic : 'N/A';
             let platforms = data.platforms.map(p => `<p class="plataforma">${p.platform.name}</p>`).join('');
+
             let genres = data.genres.map(g => `<p class="genero">${g.name}</p>`).join('');
+            console.log(data.genres)
 
             let developers = data.developers.map(d => d.name).join(', ');
             let publishers = data.publishers.map(p => p.name).join(', ');
@@ -42,10 +43,10 @@ function showGameDetails(gameId) {
                             <img src="${data.background_image}" class="img-fluid" alt="Imagen del juego">
                         </div>
                         <div class="col-md-12">
-                            <h3>${data.name} <span class="badge bg-success">${metacritic}</span></h3>
+                            <h3>${data.name} <span class="badge nota">${metacritic}</span></h3>
                             <p class="fecha-salida"> ${releaseDate}</p>
                             ${platforms}
-                            <p class="genero">${genres}</p>
+                            ${genres}
                             <p>Desarrollado por: ${developers}</p>
                             <p>Publicado por: ${publishers}</p>
                             <p>${description}</p>
