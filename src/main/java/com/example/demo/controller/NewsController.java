@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
 
@@ -22,13 +23,30 @@ public class NewsController {
     private UsuarioRepository usuarioRepository;
 
     @GetMapping("/noticias")
-    public String getNoticias(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        Map<String, Object> noticias = newsService.getVideoGameNews();
+    public String getNoticias(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String datePublished,
+            @RequestParam(required = false) String sortBy,
+            Model model,
+            @AuthenticationPrincipal UserDetails userDetails) {
+
+        // Si no hay filtros, se muestran noticias por defecto (videojuegos)
+        Map<String, Object> noticias;
+        if (keyword == null && datePublished == null && sortBy == null) {
+            noticias = newsService.getVideoGameNews();  // Noticias por defecto
+        } else {
+            // Si se aplican filtros, se llaman a las noticias filtradas
+            noticias = newsService.getFilteredNews(keyword, datePublished, sortBy);
+        }
+
+
+
         model.addAttribute("noticias", noticias.get("articles"));
+        model.addAttribute("keyword", keyword); // Añadir keyword al modelo
+        model.addAttribute("datePublished", datePublished); // Añadir datePublished al modelo
+        model.addAttribute("sortBy", sortBy); // Añadir sortBy al modelo
 
-
-
-        // Si hay usuario añade ese usuario, sino tiene los elementos de invitado
+        // Si hay usuario autenticado, se muestra su información, de lo contrario se asigna información de invitado
         if (userDetails != null) {
             Usuario usuario = usuarioRepository.findByEmail(userDetails.getUsername());
             model.addAttribute("username", userDetails.getUsername());

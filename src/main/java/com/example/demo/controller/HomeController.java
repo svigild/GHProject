@@ -68,16 +68,16 @@ public class HomeController {
             model.addAttribute("urlFotoPerfil", "https://static.vecteezy.com/system/resources/thumbnails/005/544/718/small/profile-icon-design-free-vector.jpg");
         }
 
-            try {
-                Map<String, Object> noticias = newsService.getVideoGameNews();
-                List<Map<String, Object>> articles = (List<Map<String, Object>>) noticias.get("articles");
-                List<Map<String, Object>> ultimasNoticias = articles.subList(0, Math.min(articles.size(), 4));
-                model.addAttribute("ultimasNoticias", ultimasNoticias);
-            } catch (Exception e) {
-                System.out.println("Error al obtener noticias: " + e.getMessage());
-                model.addAttribute("ultimasNoticias", Collections.emptyList());
-                model.addAttribute("errorNoticias", "No se pudieron cargar las noticias en este momento. Por favor, intenta más tarde.");
-            }
+        try {
+            Map<String, Object> noticias = newsService.getVideoGameNews();
+            List<Map<String, Object>> articles = (List<Map<String, Object>>) noticias.get("articles");
+            List<Map<String, Object>> ultimasNoticias = articles.subList(0, Math.min(articles.size(), 6)); // Cambiado a 6
+            model.addAttribute("ultimasNoticias", ultimasNoticias);
+        } catch (Exception e) {
+            System.out.println("Error al obtener noticias: " + e.getMessage());
+            model.addAttribute("ultimasNoticias", Collections.emptyList());
+            model.addAttribute("errorNoticias", "No se pudieron cargar las noticias en este momento. Por favor, intenta más tarde.");
+        }
 
             try {
                 List<Map<String, Object>> juegos = gameService.getThreeRandomGames();
@@ -89,25 +89,5 @@ public class HomeController {
             }
             return "home";
     }
-
-    /*
-    @PostMapping("/")
-    public String loginPost(HttpServletRequest request, @ModelAttribute UsuarioLoginDTO usuarioLoginDTO, Model model) {
-        try {
-            Usuario usuario = usuarioService.login(usuarioLoginDTO); // Verificar las credenciales del usuario
-            HttpSession session = request.getSession();
-            session.setAttribute("authenticated", true); // Establecer la autenticación en la sesión
-            session.setAttribute("nombreUsuario", usuario.getNombre()); // Guardar el nombre del usuario en la sesión
-            session.setAttribute("usuarioId", (Integer) usuario.getId()); // Guardar el ID del usuario en la sesión
-            session.setAttribute("urlFotoPerfil", usuario.getFotoPerfil());
-            session.setAttribute("rol", usuario.getRol());
-            return "redirect:/"; // Redirigir a la página de inicio después del inicio de sesión exitoso
-        } catch (RuntimeException e) {
-            model.addAttribute("error", "Credenciales inválidas"); // Agregar un mensaje de error al modelo
-            return "login"; // Volver a cargar la página de inicio de sesión con un mensaje de error
-        }
-    }
-
-     */
 
 }

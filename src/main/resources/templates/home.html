@@ -71,26 +71,39 @@
     </div>
 </nav>
 
-<section id="home" class="hero-section" style="background-image: url('https://c.wallhere.com/photos/8d/07/1920x1080_px_Link_Nintendo_The_Legend_Of_Zelda_The_Legend_Of_Zelda_Majoras_Mask_video_games-1065900.jpg!d'); background-size: cover; background-position: center; padding: 100px 0; text-align: center; color: white;">
-    <div class="container">
-        <div class="titulo">
-            <h1 class="display-4 fw-bold mb-4 ti">Bienvenido a <span class="nombre">GameHub</span></h1>
-            <p class="lead mb-4">Descubre, juega y conecta con gamers de todo el mundo</p>
-            <a href="juegos" id="boton-principal" class="btn btn-light btn-lg">Explorar Juegos</a>
+<header id="home" class="hero-section" style="background-image: url('https://c.wallhere.com/photos/8d/07/1920x1080_px_Link_Nintendo_The_Legend_Of_Zelda_The_Legend_Of_Zelda_Majoras_Mask_video_games-1065900.jpg!d'); background-size: cover; background-position: center; padding: 100px 0; text-align: center; color: white; position: relative;">
+    <div class="overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6);"></div>
+    <div class="container position-relative">
+        <div class="titulo p-4">
+            <h1 class="display-3 fw-bold mb-3" style="text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);">
+                Bienvenido a <span class="nombre">GameHub</span>
+            </h1>
+            <p class="lead mb-4" style="font-size: 1.25rem; text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.7);">
+                Descubre, juega y conecta con gamers de todo el mundo
+            </p>
+            <a href="juegos" id="boton-principal" class="btn btn-light btn-lg shadow">
+                <i class="fas fa-gamepad"></i> Explorar Juegos
+            </a>
         </div>
     </div>
-</section>
+</header>
 
 <section id="games" class="py-5">
     <div class="container">
-        <h2 class="text-center mb-5">Juegos Recomendados</h2>
+        <h2 class="text-center mb-5 section-title">Juegos Recomendados</h2>
         <div class="row">
             <div th:each="juego : ${juegos}" class="col-md-4 mb-4">
-                <div class="card">
-                    <img th:src="${juego.background_image}" class="card-img-top" alt="Imagen del juego">
+                <div class="card game-card">
+                    <div class="card-img-container">
+                        <img th:src="${juego.background_image}" class="card-img-top" alt="Imagen del juego">
+                    </div>
                     <div class="card-body">
                         <h5 class="card-title" th:text="${juego.name}">Nombre del juego</h5>
-                        <p class="card-text" th:text="${juego['description_raw']}">Descripción del juego</p>
+                        <!-- Año de Lanzamiento y Géneros -->
+                        <div class="game-badges mb-3 mt-3">
+                            <span class="badge badge-year" th:text="${juego.released.split('-')[0]}">2024</span>
+                            <span class="badge badge-genre" th:each="genre : ${juego.genres}" th:text="${genre.name}">Acción</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -98,47 +111,54 @@
     </div>
 </section>
 
-<section id="community" class="py-5 bg-light text-dark">
+<section id="community" class="py-5 text-light">
     <div class="container">
-        <h2 class="text-center mb-5">Únete a Nuestra Comunidad</h2>
+        <h2 class="text-center mb-5 section-title">Únete a Nuestra Comunidad</h2>
         <div class="row g-4">
             <div class="col-md-4 text-center">
-                <i class="fas fa-comments feature-icon mb-3"></i>
-                <h4>Foros Activos</h4>
-                <p>Participa en discusiones apasionantes sobre tus juegos favoritos.</p>
+                <div class="community-card">
+                    <i class="fas fa-comments feature-icon mb-3"></i>
+                    <h4 class="community-title">Foros Activos</h4>
+                    <p class="community-text">Participa en discusiones apasionantes sobre tus juegos favoritos.</p>
+                    <a href="/foros" class="btn btn-custom">Participar</a>
+                </div>
             </div>
             <div class="col-md-4 text-center">
-                <i class="fas fa-medal feature-icon mb-3"></i>
-                <h4>Torneos</h4>
-                <p>Compite en torneos regulares y gana premios exclusivos.</p>
+                <div class="community-card">
+                    <i class="fas fa-medal feature-icon mb-3"></i>
+                    <h4 class="community-title">Torneos</h4>
+                    <p class="community-text">Compite en torneos regulares y gana premios exclusivos.</p>
+                    <a href="/torneos" class="btn btn-custom">Ver Torneos</a>
+                </div>
             </div>
             <div class="col-md-4 text-center">
-                <i class="fas fa-gamepad feature-icon mb-3"></i>
-                <h4>Videojuegos</h4>
-                <p>Explora juegos y descubre información apasionante sobre ellos.</p>
+                <div class="community-card">
+                    <i class="fas fa-gamepad feature-icon mb-3"></i>
+                    <h4 class="community-title">Videojuegos</h4>
+                    <p class="community-text">Explora juegos y descubre información apasionante sobre ellos.</p>
+                    <a href="/juegos" class="btn btn-custom">Explorar</a>
+                </div>
             </div>
         </div>
     </div>
 </section>
-
 <section id="news" class="news-section py-5">
     <div class="container">
-        <h2 class="text-center mb-5">Últimas Noticias</h2>
+        <h2 class="section-title text-center mb-5">Últimas Noticias</h2>
         <div class="row">
-            <div th:each="noticia : ${ultimasNoticias}" class="col-md-6 mb-4 noticia">
-                <div class="card h-100">
-                    <a th:href="${noticia.url}" class="card-link text-decoration-none">
-                        <div class="row no-gutters">
-                            <div class="col-md-4">
-                                <img th:src="${noticia.urlToImage}" class="card-img" alt="Imagen de la noticia">
+            <div th:each="noticia : ${ultimasNoticias}" class="col-lg-4 col-md-6 mb-4 noticia">
+                <div class="card game-card">
+                    <div class="card-img-container">
+                        <a th:href="${noticia.url}" class="card-link text-decoration-none">
+                            <img th:src="${noticia.urlToImage}" class="card-img-top" alt="Imagen de la noticia">
+                            <div class="card-overlay">
+                                <span class="btn btn-custom">Leer Más</span>
                             </div>
-                            <div class="col-md-8">
-                                <div class="card-body">
-                                    <h5 class="card-title" th:text="${noticia.title}">Título de la noticia</h5>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${noticia.title}">Título de la noticia</h5>
+                    </div>
                 </div>
             </div>
         </div>
